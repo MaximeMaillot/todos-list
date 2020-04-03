@@ -16,11 +16,9 @@ router.get('/', function(req, res, next) {
 router.get('/:id', function(req, res, next) {
   var todo = todos.find(element => element.id === req.params.id);
   if (todo) {
-    res.status(200);
-    res.send(todo);
+    res.status(200).send(todo);
   } else {
-    res.status(404);
-    res.send();
+    res.status(404).send();
   }
 });
 
@@ -34,6 +32,17 @@ router.post('/', function(req, res, next) {
   todos.push(todo);
 
   res.send(todo);
+});
+
+router.put('/:id', function(req, res, next) {
+  var name = req.body.name;
+  var index = todos.findIndex(element => element.id === req.params.id);
+  if (index !== -1) {
+    todos[index].name = name;
+    res.send(todos[index]);
+  } else {
+    res.status(404).send();
+  }
 })
 
 router.delete('/:id', function(req, res, next) {
@@ -48,6 +57,6 @@ router.delete('/:id', function(req, res, next) {
     res.status(404);
   }
   res.send();
-})
+});
 
 module.exports = router;
