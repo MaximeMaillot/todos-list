@@ -1,20 +1,17 @@
-// import { v4 as uuidv4 } from 'uuid';
 const { v4: uuidv4 } = require('uuid');
-var express = require('express');
-var router = express.Router();
-var moment = require('moment');
+const express = require('express');
+const router = express.Router();
+const moment = require('moment');
 
 
+const todos = [{"id": "1", "name": "test", "date": "03/04/2020"}, {"id": "2", "name": "test2", "date": "03/04/2020"}]
 
-var todos = [{"id": "1", "name": "test", "date": "03/04/2020"}, {"id": "2", "name": "test2", "date": "03/04/2020"}]
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   res.send(todos);
 });
 
-router.get('/:id', function(req, res, next) {
-  var todo = todos.find(element => element.id === req.params.id);
+router.get('/:id', (req, res) => {
+  const todo = todos.find(element => element.id === req.params.id);
   if (todo) {
     res.status(200).send(todo);
   } else {
@@ -22,41 +19,50 @@ router.get('/:id', function(req, res, next) {
   }
 });
 
-router.post('/', function(req, res, next) {
-  var name = req.body.name;
-  var id = uuidv4();
-  var date = moment().format();
+router.post('/', (req, res) => {
+  const name = req.body.name;
 
-  var todo = {id, name, date}
+  if (!name) {
+    res.status(400).json({error: "Name can't be null"});
+  } else {
+    const id = uuidv4();
+    const date = moment().format();
 
-  todos.push(todo);
+   const todo = {id, name, date}
 
-  res.send(todo);
+   todos.push(todo);
+
+   res.send(todo);
+}
 });
 
-router.put('/:id', function(req, res, next) {
-  var name = req.body.name;
-  var index = todos.findIndex(element => element.id === req.params.id);
-  if (index !== -1) {
-    todos[index].name = name;
-    res.send(todos[index]);
+router.put('/:id', (req, res) => {
+  const name = req.body.name;
+  const id = req.params.id
+
+  if (!name) {
+    res.status(400).json({error: "Name can't be null"});
   } else {
-    res.status(404).send();
+    const index = todos.findIndex(element => element.id === id);
+    if (index !== -1) {
+      todos[index].name = name;
+      res.send(todos[index]);
+    } else {
+      res.status(404).send();
+    }
   }
 })
 
-router.delete('/:id', function(req, res, next) {
-  var id = req.params.id;
+router.delete('/:id', (req, res) => {
+  const id = req.params.id;
 
-  var arrayLength = todos.length;
-  todos = todos.filter(element => element.id !== id)
-
-  if (arrayLength > todos.length) {
-    res.status(200);
+  const index = todos.findIndex(element => element.id === id)
+  if (index !== -1) {
+    todos.splice(index, 1);
+    res.status(200).send();
   } else {
-    res.status(404);
+    res.status(404).send();
   }
-  res.send();
 });
 
 module.exports = router;
