@@ -1,8 +1,9 @@
 var express = require('express');
 var logger = require('morgan');
+var dotenv = require('dotenv').config();
 
 var indexRouter = require('./routes/index');
-var todoRoute = require('./routes/todos')
+var todoRoute = require('./routes/todos');
 
 var app = express();
 
