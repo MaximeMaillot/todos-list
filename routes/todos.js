@@ -6,7 +6,7 @@ var moment = require('moment');
 
 
 
-const todos = [{"id": 1, "name": "test", "date": "03/04/2020"}, {"id": 2, "name": "test2", "date": "03/04/2020"}]
+var todos = [{"id": 1, "name": "test", "date": "03/04/2020"}, {"id": 2, "name": "test2", "date": "03/04/2020"}]
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -23,6 +23,20 @@ router.post('/', function(req, res, next) {
   todos.push(todo);
 
   res.send(todo);
+})
+
+router.delete('/:id', function(req, res, next) {
+  var id = req.params.id;
+
+  var arrayLength = todos.length;
+  todos = todos.filter(element => element.id !== id)
+
+  if (arrayLength > todos.length) {
+    res.status(200);
+  } else {
+    res.status(404);
+  }
+  res.send();
 })
 
 module.exports = router;
