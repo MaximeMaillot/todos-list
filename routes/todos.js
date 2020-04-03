@@ -6,11 +6,22 @@ var moment = require('moment');
 
 
 
-var todos = [{"id": 1, "name": "test", "date": "03/04/2020"}, {"id": 2, "name": "test2", "date": "03/04/2020"}]
+var todos = [{"id": "1", "name": "test", "date": "03/04/2020"}, {"id": "2", "name": "test2", "date": "03/04/2020"}]
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.send(todos);
+});
+
+router.get('/:id', function(req, res, next) {
+  var todo = todos.find(element => element.id === req.params.id);
+  if (todo) {
+    res.status(200);
+    res.send(todo);
+  } else {
+    res.status(404);
+    res.send();
+  }
 });
 
 router.post('/', function(req, res, next) {
