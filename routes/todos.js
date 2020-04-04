@@ -1,14 +1,15 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const pgp = require('pg-promise')();
+import pgp from "pg-promise";
+
 const dbConnectionData = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   database: process.env.DB_DATABASE,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-}
-const db = pgp(dbConnectionData);
+};
+const db = pgp()(dbConnectionData);
 
 /**
  * get a list of all the todos
@@ -37,7 +38,7 @@ router.get('/:id', (req, res) => {
       if (data.length === 0) {
         res.status(404).json({error: "the todo with the id: " + id + " doesn't exist in the database"});
       } else {
-        res.status(200).send(data);
+        res.status(200).send(data[0]);
       }
     })
     .catch(function (error) {
@@ -54,9 +55,9 @@ router.post('/', (req, res) => {
   if (!name) {
     res.status(400).json({error: "Name can't be null"});
   } else {
-    db.any('INSERT INTO todo(name) VALUES($1) RETURNING *', name) 
+    db.any('INSERT INTO todo(name) VALUES($1) RETURNING *', name)
     .then(function (data) {
-      res.status(200).send(data);
+      res.status(200).send(data[0]);
     })
     .catch(function (error) {
       res.status(500).send(error);
@@ -74,12 +75,12 @@ router.put('/:id', (req, res) => {
   if (!name) {
     res.status(400).json({error: "Name can't be null"});
   } else {
-    db.any('UPDATE todo SET name = $1 WHERE id = $2 RETURNING *', [name, id]) 
+    db.any('UPDATE todo SET name = $1 WHERE id = $2 RETURNING *', [name, id])
     .then(function (data) {
       if (data.length === 0) {
         res.status(404).json({error: "the todo with the id: " + id + " doesn't exist in the database"});
       } else {
-        res.status(200).send(data);
+        res.status(200).send(data[0]);
       }
     })
     .catch(function (error) {
@@ -94,12 +95,12 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   const id = req.params.id;
 
-  db.any('DELETE FROM todo WHERE id = $1 RETURNING *', id) 
+  db.any('DELETE FROM todo WHERE id = $1 RETURNING *', id)
     .then(function (data) {
       if (data.length === 0) {
         res.status(404).json({error: "the todo with the id: " + id + " doesn't exist in the database"});
       } else {
-        res.status(200).send(data);
+        res.status(204).send();
       }
     })
     .catch(function (error) {
@@ -107,4 +108,4 @@ router.delete('/:id', (req, res) => {
     })
 });
 
-module.exports = router;
+export { router };
