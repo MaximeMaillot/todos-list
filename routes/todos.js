@@ -1,25 +1,29 @@
 const express = require('express');
 const router = express.Router();
 const pgp = require('pg-promise')();
-const cn = {
+const dbConnectionData = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   database: process.env.DB_DATABASE,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
 }
-const db = pgp(cn);
+const db = pgp(dbConnectionData);
 
 /**
  * get a list of all the todos
  */
 router.get('/', (req, res) => {
-  db.many('SELECT * FROM todo ORDER BY id')
+  db.any('SELECT * FROM todo ORDER BY id')
     .then(function (data) {
-      res.send(data);
+      if (data.length === 0) {
+        res.status(404).json({error: "No todo were found in the database"});
+      } else {
+        res.status(200).send(data);
+      }
     })
     .catch(function (error) {
-      res.status(404).send();
+      res.status(500).send(error);
     })
 });
 
@@ -27,12 +31,17 @@ router.get('/', (req, res) => {
  * get one todo by id
  */
 router.get('/:id', (req, res) => {
-  db.one('SELECT * FROM todo WHERE id = $1', req.params.id)
+  const id = req.params.id;
+  db.any('SELECT * FROM todo WHERE id = $1', id)
     .then(function (data) {
-      res.send(data);
+      if (data.length === 0) {
+        res.status(404).json({error: "the todo with the id: " + id + " doesn't exist in the database"});
+      } else {
+        res.status(200).send(data);
+      }
     })
     .catch(function (error) {
-      res.status(404).send();
+      res.status(500).send(error);
     })
 });
 
@@ -45,12 +54,12 @@ router.post('/', (req, res) => {
   if (!name) {
     res.status(400).json({error: "Name can't be null"});
   } else {
-    db.one('INSERT INTO todo(name) VALUES($1) RETURNING *', name) 
+    db.any('INSERT INTO todo(name) VALUES($1) RETURNING *', name) 
     .then(function (data) {
       res.status(200).send(data);
     })
     .catch(function (error) {
-      res.status(404).send(error);
+      res.status(500).send(error);
     })
   }
 });
@@ -65,12 +74,16 @@ router.put('/:id', (req, res) => {
   if (!name) {
     res.status(400).json({error: "Name can't be null"});
   } else {
-    db.one('UPDATE todo SET name = $1 WHERE id = $2 RETURNING *', [name, id]) 
+    db.any('UPDATE todo SET name = $1 WHERE id = $2 RETURNING *', [name, id]) 
     .then(function (data) {
-      res.status(200).send(data);
+      if (data.length === 0) {
+        res.status(404).json({error: "the todo with the id: " + id + " doesn't exist in the database"});
+      } else {
+        res.status(200).send(data);
+      }
     })
     .catch(function (error) {
-      res.status(404).send(error);
+      res.status(500).send(error);
     })
   }
 })
@@ -81,12 +94,16 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   const id = req.params.id;
 
-  db.one('DELETE FROM todo WHERE id = $1 RETURNING *', id) 
+  db.any('DELETE FROM todo WHERE id = $1 RETURNING *', id) 
     .then(function (data) {
-      res.status(200).send(data);
+      if (data.length === 0) {
+        res.status(404).json({error: "the todo with the id: " + id + " doesn't exist in the database"});
+      } else {
+        res.status(200).send(data);
+      }
     })
     .catch(function (error) {
-      res.status(404).send(error);
+      res.status(500).send(error);
     })
 });
 
