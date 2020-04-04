@@ -38,7 +38,7 @@ router.get('/:id', (req, res) => {
       if (data.length === 0) {
         res.status(404).json({error: "the todo with the id: " + id + " doesn't exist in the database"});
       } else {
-        res.status(200).send(data);
+        res.status(200).send(data[0]);
       }
     })
     .catch(function (error) {
@@ -57,7 +57,7 @@ router.post('/', (req, res) => {
   } else {
     db.any('INSERT INTO todo(name) VALUES($1) RETURNING *', name)
     .then(function (data) {
-      res.status(200).send(data);
+      res.status(200).send(data[0]);
     })
     .catch(function (error) {
       res.status(500).send(error);
@@ -80,7 +80,7 @@ router.put('/:id', (req, res) => {
       if (data.length === 0) {
         res.status(404).json({error: "the todo with the id: " + id + " doesn't exist in the database"});
       } else {
-        res.status(200).send(data);
+        res.status(200).send(data[0]);
       }
     })
     .catch(function (error) {
@@ -100,7 +100,7 @@ router.delete('/:id', (req, res) => {
       if (data.length === 0) {
         res.status(404).json({error: "the todo with the id: " + id + " doesn't exist in the database"});
       } else {
-        res.status(200).send(data);
+        res.status(204).send();
       }
     })
     .catch(function (error) {

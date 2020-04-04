@@ -6,7 +6,6 @@
 import http from 'http';
 import app from '../app.js';
 import debugLib from 'debug';
-
 const debug = debugLib('todo-list:server');
 
 /**
