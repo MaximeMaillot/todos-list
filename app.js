@@ -5,9 +5,9 @@ import { init } from "./db/migration.js";
 import { router as indexRouter } from "./routes/index.js";
 import { router as todoRouter } from "./routes/todos.js";
 
-var app = express();
-
 init("todolist");
+
+var app = express();
 
 app.use(logger("combined"));
 app.use(express.json());

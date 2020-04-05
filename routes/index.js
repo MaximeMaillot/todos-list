@@ -1,10 +1,10 @@
-import express from 'express';
+import express from "express";
 
 const router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.send('Hello World');
+router.get("/", function (req, res) {
+  res.send("Hello World");
 });
 
 export { router };

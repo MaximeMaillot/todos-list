@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import pgp from "pg-promise";
 
 const dbConnectionData = {
