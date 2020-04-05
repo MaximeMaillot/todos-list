@@ -60,5 +60,5 @@ typings/
 # next.js build output
 .next
 
-# ignore vscode config
+# ignore vs configuration
 .vscode
