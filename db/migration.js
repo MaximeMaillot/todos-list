@@ -8,9 +8,7 @@ export function init(database) {
         "name text NOT NULL," +
         "created_at date NOT NULL DEFAULT CURRENT_DATE)"
     )
-      .then(function (data) {
-        console.log("table was created if it did not exist");
-      })
+      .then(function () {})
       .catch(function (error) {
         throw error;
       });

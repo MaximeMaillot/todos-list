@@ -1,34 +1,14 @@
 import express from "express";
 import logger from "morgan";
 import "./env.js";
-<<<<<<< HEAD
 import { init } from "./db/migration.js";
 import { router as indexRouter } from "./routes/index.js";
 import { router as todoRouter } from "./routes/todos.js";
 
-var app = express();
-
 init("todolist");
 
-=======
-import { db } from "./db/dbConnection.js";
-import { router as indexRouter } from "./routes/index.js";
-import { router as todoRouter } from "./routes/todos.js";
-
-db.none(
-  "CREATE TABLE IF NOT EXISTS todo(" +
-    "id serial NOT NULL PRIMARY KEY," +
-    "name text NOT NULL," +
-    "date date NOT NULL DEFAULT CURRENT_DATE)"
-)
-  .then(function () {})
-  .catch(function (error) {
-    throw error;
-  });
-
 var app = express();
 
->>>>>>> cf4459e... set up eslint and prettier
 app.use(logger("combined"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
