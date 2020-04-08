@@ -1,20 +1,19 @@
 import express from "express";
 const router = express.Router();
-import { db } from "../db/dbConnection.js";
+import * as dbQuery from "../db/dbQuery.js";
 
 /**
  * get a list of all the todos
  */
 router.get("/", (req, res) => {
-  db.any("SELECT * FROM todo ORDER BY id")
+  dbQuery
+    .getAll()
     .then(function (data) {
-      if (data.length === 0) {
-        res.status(404).json({ error: "No todo were found in the database" });
-      } else {
-        res.status(200).send(data);
-      }
+      console.log(data);
+      res.status(200).send(data);
     })
     .catch(function (error) {
+      console.log(error);
       res.status(500).send(error);
     });
 });
@@ -24,7 +23,8 @@ router.get("/", (req, res) => {
  */
 router.get("/:id", (req, res) => {
   const id = req.params.id;
-  db.any("SELECT * FROM todo WHERE id = $1", id)
+  dbQuery
+    .getById(id)
     .then(function (data) {
       if (data.length === 0) {
         res.status(404).json({
@@ -49,7 +49,8 @@ router.post("/", (req, res) => {
   if (!name) {
     res.status(400).json({ error: "Name can't be null" });
   } else {
-    db.any("INSERT INTO todo(name) VALUES($1) RETURNING *", name)
+    dbQuery
+      .insert(name)
       .then(function (data) {
         res.status(200).send(data[0]);
       })
@@ -69,7 +70,8 @@ router.put("/:id", (req, res) => {
   if (!name) {
     res.status(400).json({ error: "Name can't be null" });
   } else {
-    db.any("UPDATE todo SET name = $1 WHERE id = $2 RETURNING *", [name, id])
+    dbQuery
+      .update(id, name)
       .then(function (data) {
         if (data.length === 0) {
           res.status(404).json({
@@ -92,7 +94,8 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   const id = req.params.id;
 
-  db.any("DELETE FROM todo WHERE id = $1 RETURNING *", id)
+  dbQuery
+    .remove(id)
     .then(function (data) {
       if (data.length === 0) {
         res.status(404).json({
