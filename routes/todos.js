@@ -9,11 +9,9 @@ router.get("/", (req, res) => {
   dbQuery
     .getAll()
     .then(function (data) {
-      console.log(data);
       res.status(200).send(data);
     })
     .catch(function (error) {
-      console.log(error);
       res.status(500).send(error);
     });
 });
@@ -52,7 +50,7 @@ router.post("/", (req, res) => {
     dbQuery
       .insert(name)
       .then(function (data) {
-        res.status(200).send(data[0]);
+        res.status(200).send(data);
       })
       .catch(function (error) {
         res.status(500).send(error);
