@@ -1,7 +1,9 @@
 import dotenv from "dotenv";
 
-const envPath = process.env.ENV ? `./.env.${process.env.ENV}` : "./.env";
+if (process.env.ENV !== "heroku") {
+  const envPath = process.env.ENV ? `./.env.${process.env.ENV}` : "./.env";
 
-dotenv.config({
-  path: envPath,
-});
+  dotenv.config({
+    path: envPath,
+  });
+}
