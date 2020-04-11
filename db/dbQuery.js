@@ -10,7 +10,7 @@ export function getAll() {
 
 /**
  * Select a todo from the database
- * @param {Integer} id
+ * @param {Number} id
  * @returns {Promise}
  */
 export function getById(id) {
@@ -28,7 +28,7 @@ export function insert(name) {
 
 /**
  * Update a todo in the database
- * @param {Integer} id
+ * @param {Number} id
  * @param {String} name
  * @returns {Promise}
  */
@@ -41,7 +41,7 @@ export function update(id, name) {
 
 /**
  * Delete a todo from the database
- * @param {Integer} id
+ * @param {Number} id
  * @returns {Promise}
  */
 export function remove(id) {

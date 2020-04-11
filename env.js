@@ -1,14 +1,7 @@
 import dotenv from "dotenv";
 
-let environment = "dev";
+const envPath = process.env.ENV ? `./.env.${process.env.ENV}` : "./.env";
 
-process.argv.forEach((element) => {
-  if (element.includes("mocha")) {
-    environment = "test";
-  }
+dotenv.config({
+  path: envPath,
 });
-if (environment === "test") {
-  dotenv.config({ path: "./.env.test" });
-} else {
-  dotenv.config();
-}

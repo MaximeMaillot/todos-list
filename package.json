@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon --experimental-modules ./bin/www.js",
-    "test": "mocha '__tests__/*.js'"
+    "test": "cross-env ENV=test mocha '__tests__/*.js'"
   },
   "dependencies": {
     "debug": "~2.6.9",
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
