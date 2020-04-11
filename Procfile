@@ -1,0 +1,1 @@
+web: ENV=heroku node ./bin/www.js
