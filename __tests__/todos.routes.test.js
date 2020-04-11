@@ -4,7 +4,7 @@ import app from "../app.js";
 import chai from "chai";
 import * as dbQuery from "../db/dbQuery.js";
 
-beforeEach(function () {
+beforeEach(() => {
   dbQuery.clear();
 });
 
@@ -72,7 +72,8 @@ describe("route POST /todos", () => {
       let response = await request(app).post("/todos").send({ name: "test" });
       chai.expect(response.status).is.equal(200);
       chai.expect(response.body.name).is.equal("test");
-      chai.expect(Number.isInteger(response.body.id)).to.be.true;
+
+      chai.expect(response.body).to.have.property("id").that.is.a("number");
 
       const expectedTodo = await Promise.resolve(
         dbQuery.getById(response.body.id)
