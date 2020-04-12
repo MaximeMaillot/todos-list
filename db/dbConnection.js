@@ -9,6 +9,8 @@ const dbConnectionData = {
   password: process.env.DB_PASSWORD,
 };
 
+console.log(JSON.stringify(dbConnectionData));
+
 const db = pgp()(dbConnectionData);
 
 export { db };
